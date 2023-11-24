@@ -34,6 +34,7 @@ jobs:
         run: |
           git branch --track main origin/main
           git checkout main
+          git pull
           git branch
           git merge --no-ff my_branch
           git status
