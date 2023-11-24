@@ -29,16 +29,6 @@ jobs:
           git add .
           git commit -am "added from workflow"
 
-      # - name: checkout main
-      #   uses: actions/checkout@v4
-      #   with: 
-      #     persist-credentials: false
-      #     ref: main
-
-      # - name: merge in main
-      #   run: |
-      #     git branch
-      #     git merge --no-ff --allow-unrelated-histories -m "github actions" origin/my_branch
 
       - name: merge into main
         run: |
@@ -47,24 +37,12 @@ jobs:
           git branch
           git merge --no-ff my_branch
           git status
-          cat .github/workflow/test.yaml
+
+
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GH_ACTIONS_PAT }}
           branch: main
 
-      # - name: Merge branch
-      #   uses: julbme/gh-action-merge-branch@v1
-      #   with:
-      #     from: ${{ github.ref }}
-      #     to: main
-      #     message: Merge commit message
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      # - name: Push changes
-      #   uses: ad-m/github-push-action@master
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}   
-      #     branch: main
-  
+    
