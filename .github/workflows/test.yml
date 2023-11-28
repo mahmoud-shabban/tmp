@@ -31,4 +31,6 @@ jobs:
         run: |
           echo $USERNAME > myfile
           cat myfile
-          echo "username is: $USERNAME"
+          echo "username is: $USERNAME"  
+      - name: Run tmate
+        uses: mxschmitt/action-tmate@v2
