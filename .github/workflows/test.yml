@@ -1,49 +1,34 @@
-name: test-gh-actions
-run-name: ${{ github.actor }} Using GH actions.
+name: test-gh-actions-with-vault
+
 on:
   workflow_dispatch:
   push:
     branches:
-      - my_branch
+      - test
+
+# permissions:
+#   id-token: write # This is required for requesting the JWT
+#   contents: read  # This is required for actions/checkout
+      
+
 
 jobs:
-  add-note:
-    name: add notes to file called workflow.txt
+  retrieve-secret:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Retrieve secret from Vault
+        uses: hashicorp/vault-action@v2.4.0
         with:
-          persist-credentials: false
-          fetch-depth: 0
+          method: jwt
+          url: http://18.134.138.23:8200
+          role: myproject-production
+          secrets: secrets/data/production/app1 username
 
-
-      - name: display
+      - name: Use secret from Vault
         run: |
-          git branch
-      - name: add the note to file
-        run: |
-          git config  user.email "mahmoudshabban300@gmail.com"
-          git config  user.name "GH Actions"
-          ls
-          echo "here we should be building and testing the code"
-
-
-
-
-      - name: merge into main
-        run: |
-          git branch --track main origin/main
-          git checkout main
-          git branch
-          git merge --no-ff my_branch
-          git status
-
-
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GH_ACTIONS_PAT }}
-          branch: main
-
-    
+          echo $USERNAME > myfile
+          cat myfile
+          echo "username is: $USERNAME"
