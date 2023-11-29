@@ -26,8 +26,8 @@ jobs:
           url: http://18.130.194.188:8200
           role: myproject-production
           secrets: |
-            secrets/data/production/app1 username | APP1 ;
-            secrets/data/production/app2 username | APP2 ;
+            secrets/data/production/app1 username | APP1 
+          # secrets/data/production/app2 username | APP2 ;
           
       - name: Use secret from Vault
         run: |
