@@ -31,8 +31,9 @@ jobs:
           
       - name: Use secret from Vault
         run: |
-          echo $USERNAME > myfile
+          echo $APP1 > myfile
+          echo $APP2 > myfile
           cat myfile
-          echo "username is: $USERNAME"  
+          echo "username is: $APP1"  
       # - name: Run tmate
       #   uses: mxschmitt/action-tmate@v2
