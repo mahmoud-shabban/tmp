@@ -29,10 +29,10 @@ jobs:
             secrets/data/production/app1 username | APP1
             secrets/data/production/app2 username | APP2;
           
-      - name: Use secret from Vault
-        run: |
-          echo $USERNAME > myfile
-          cat myfile
-          echo "username is: $USERNAME"  
-      - name: Run tmate
-        uses: mxschmitt/action-tmate@v2
+      # - name: Use secret from Vault
+      #   run: |
+      #     echo $USERNAME > myfile
+      #     cat myfile
+      #     echo "username is: $USERNAME"  
+      # - name: Run tmate
+      #   uses: mxschmitt/action-tmate@v2
