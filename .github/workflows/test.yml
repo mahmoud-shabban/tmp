@@ -23,7 +23,7 @@ jobs:
         uses: hashicorp/vault-action@v2.4.0
         with:
           method: jwt
-          url: http://18.170.72.224:8200
+          url: http://18.169.237.111:8200
           role: myproject-production
           secrets: |
             secrets/data/production/app1 username | APP1;
