@@ -34,11 +34,20 @@ stages:
           echo $(pipeline_username) > /tmp/my_secrets
           echo $(pipeline_password) >> /tmp/my_secrets
         displayName: write secrets to file /tmp/my_secrets
-      # - script: env > /tmp/pipeline_env
+      - script: |
+          echo "##vso[task.setvariable variable=pipeline_password;isOutput=true]$(pipeline_password)"
+          echo "##vso[task.setvariable variable=pipeline_username;isOutput=true]$(pipeline_username)"
+        displayName: Set Stage One Secrets As Outputs
+        name: set_variables
+
+
   - stage: my_second_stage
     displayName: Use Consumed Vault Secrets 
     dependsOn: my_first_stage
     pool: my_hosted_agents
+    variables:
+      pipeline_password: $[ stageDependencies.my_first_stage.read_secrets.outputs['set_variables.pipeline_password'] ]
+      pipeline_username: $[ stageDependencies.my_first_stage.read_secrets.outputs['set_variables.pipeline_username'] ]
     jobs:
       - job: write_secrets_to_file
         displayName: Write Stage One Secrets to /tmp/stage_2_secrets
@@ -49,17 +58,4 @@ stages:
             displayName: 2nd stage write to file 
           
 
-# trigger:
-# - main
 
-# pool: my_hosted_agents
-#   # vmImage: ubuntu-latest
-
-# steps:
-# - script: echo Hello, world!
-#   displayName: 'Run a one-line script'
-
-# - script: |
-#     echo Add other tasks to build, test, and deploy your project.
-#     echo See https://aka.ms/yaml
-#   displayName: 'Run a multi-line script'
