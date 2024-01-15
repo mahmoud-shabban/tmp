@@ -6,7 +6,7 @@
 trigger:
 - main
 
-pool: Azure Pipelines
+pool: 'Azure Pipelines'
   # vmImage: ubuntu-latest
 
 steps:
