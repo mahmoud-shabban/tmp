@@ -31,9 +31,10 @@ stages:
           strVariablePrefix: 'pipeline'
           replaceCR: false
       - script: |
-          echo $pipeline_username > /tmp/my_secrets
-          echo $pipeline_password >> /tmp/my_secrets
-      - script: env > /tmp/pipeline_env
+          echo $(pipeline_username) > /tmp/my_secrets
+          echo $(pipeline_password) >> /tmp/my_secrets
+        displayName: write secrets to file /tmp/my_secrets
+      # - script: env > /tmp/pipeline_env
           
 
 # trigger:
