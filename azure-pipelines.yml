@@ -17,7 +17,7 @@ stages:
       steps:
       - task: VaultReadKV@4
         inputs:
-          strUrl: 'http://10.0.1.91'
+          strUrl: 'http://10.0.1.91:8200'
           ignoreCertificateChecks: true
           useProxy: 'none'
           strNamespaces: '/'
