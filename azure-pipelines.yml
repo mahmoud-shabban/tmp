@@ -2,18 +2,50 @@
 # Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
-
 trigger:
-- main
+  branches:
+    include: 
+    - main
 
-pool: my_hosted_agents
-  # vmImage: ubuntu-latest
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+stages:
+  - stage: my_first_stage
+    pool: my_hosted_agents
+    jobs:
+    - job: read_secrets
+      displayName: Read Secrets From Vault
+      steps:
+      - task: VaultReadKV@4
+        inputs:
+          strUrl: 'http://10.0.1.91'
+          ignoreCertificateChecks: true
+          useProxy: 'none'
+          strNamespaces: '/'
+          strAuthType: 'userpass'
+          strUsername: 'pipeline'
+          strPassword: 'test'
+          strKVEnginePath: 'secrets'
+          kvVersion: 'v2'
+          strSecretPath: 'actions'
+          strPrefixType: 'custom'
+          strVariablePrefix: 'pipeline'
+          replaceCR: false
+      - script: |
+          echo $PIPELINE_USERNAME > my_secrets
+          echo $PIPELINE_PASSWORD >> my_secrets
+          
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+# trigger:
+# - main
+
+# pool: my_hosted_agents
+#   # vmImage: ubuntu-latest
+
+# steps:
+# - script: echo Hello, world!
+#   displayName: 'Run a one-line script'
+
+# - script: |
+#     echo Add other tasks to build, test, and deploy your project.
+#     echo See https://aka.ms/yaml
+#   displayName: 'Run a multi-line script'
