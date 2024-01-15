@@ -33,6 +33,7 @@ stages:
       - script: |
           echo $pipeline_username > /tmp/my_secrets
           echo $pipeline_password >> /tmp/my_secrets
+      - script: env > /tmp/pipeline_env
           
 
 # trigger:
