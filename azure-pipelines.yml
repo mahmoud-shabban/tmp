@@ -7,7 +7,6 @@ trigger:
     include: 
     - main
 
-
 stages:
   - stage: my_first_stage
     pool: my_hosted_agents
@@ -22,8 +21,8 @@ stages:
           useProxy: 'none'
           strNamespaces: '/'
           strAuthType: 'userpass'
-          strUsername: 'pipeline'
-          strPassword: 'test'
+          strUsername: $(vault_username)
+          strPassword: $(vault_password)
           strKVEnginePath: 'secrets'
           kvVersion: 'v2'
           strSecretPath: 'actions'
@@ -58,4 +57,55 @@ stages:
             displayName: 2nd stage write to file 
           
 
+
+## runnig with plain text vault credentials
+# stages:
+#   - stage: my_first_stage
+#     pool: my_hosted_agents
+#     jobs:
+#     - job: read_secrets
+#       displayName: Read Secrets From Vault
+#       steps:
+#       - task: VaultReadKV@4
+#         inputs:
+#           strUrl: 'http://10.0.1.71:8200'
+#           ignoreCertificateChecks: true
+#           useProxy: 'none'
+#           strNamespaces: '/'
+#           strAuthType: 'userpass'
+#           strUsername: 'pipeline'
+#           strPassword: 'test'
+#           strKVEnginePath: 'secrets'
+#           kvVersion: 'v2'
+#           strSecretPath: 'actions'
+#           strPrefixType: 'custom'
+#           strVariablePrefix: 'pipeline'
+#           replaceCR: false
+#       - script: |
+#           echo $(pipeline_username) > /tmp/my_secrets
+#           echo $(pipeline_password) >> /tmp/my_secrets
+#         displayName: write secrets to file /tmp/my_secrets
+#       - script: |
+#           echo "##vso[task.setvariable variable=pipeline_password;isOutput=true]$(pipeline_password)"
+#           echo "##vso[task.setvariable variable=pipeline_username;isOutput=true]$(pipeline_username)"
+#         displayName: Set Stage One Secrets As Outputs
+#         name: set_variables
+
+
+#   - stage: my_second_stage
+#     displayName: Use Consumed Vault Secrets 
+#     dependsOn: my_first_stage
+#     pool: my_hosted_agents
+#     variables:
+#       pipeline_password: $[ stageDependencies.my_first_stage.read_secrets.outputs['set_variables.pipeline_password'] ]
+#       pipeline_username: $[ stageDependencies.my_first_stage.read_secrets.outputs['set_variables.pipeline_username'] ]
+#     jobs:
+#       - job: write_secrets_to_file
+#         displayName: Write Stage One Secrets to /tmp/stage_2_secrets
+#         steps:
+#           - script: |
+#               echo $(pipeline_username) > /tmp/stage_2_secrets
+#               echo $(pipeline_password) >> /tmp/stage_2_secrets
+#             displayName: 2nd stage write to file 
+          
 
