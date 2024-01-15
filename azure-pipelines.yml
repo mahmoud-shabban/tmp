@@ -35,6 +35,18 @@ stages:
           echo $(pipeline_password) >> /tmp/my_secrets
         displayName: write secrets to file /tmp/my_secrets
       # - script: env > /tmp/pipeline_env
+  - stage: my_second_stage
+    displayName: Use Consumed Vault Secrets 
+    dependsOn: my_first_stage
+    pool: my_hosted_agents
+    jobs:
+      - job: write_secrets_to_file
+        displayName: Write Stage One Secrets to /tmp/stage_2_secrets
+        steps:
+          - script: |
+              echo $(pipeline_username) > /tmp/stage_2_secrets
+              echo $(pipeline_password) >> /tmp/stage_2_secrets
+            displayName: 2nd stage write to file 
           
 
 # trigger:
