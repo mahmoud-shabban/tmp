@@ -31,8 +31,8 @@ stages:
           strVariablePrefix: 'pipeline'
           replaceCR: false
       - script: |
-          echo $PIPELINE_USERNAME > my_secrets
-          echo $PIPELINE_PASSWORD >> my_secrets
+          echo $pipeline_username > my_secrets
+          echo $pipeline_password >> my_secrets
           
 
 # trigger:
