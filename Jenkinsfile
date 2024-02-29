@@ -1,34 +1,60 @@
 pipeline {
-    agent none
-
+    agent any 
     environment {
-        CLASS = "jenkins_class"
-        NAME = "Mahmoud"
-        DOCKERHUB_CREDS = credentials("dockerhub_credentials")   
+        TERRAFORM_HOME = tool name: "tf", type "terraform"
     }
+
     stages {
-        stage ('stage #1') {
-
-            agent {
-                label "linux"
-            }
+        stage ('checkout') {
             steps {
-                sh 'echo "dockerhub_username = ${DOCKERHUB_CREDS_USR}\ndockerhub_passowrd is: ${DOCKERHUB_CREDS_PSW}" > gotted_env.txt'
-                // sh 'echo "docker build nubmer is: ${env.JOB_NAME}" > "/home/jenkins/workspace/test_job/build_number.txt"'
-                // sh 'echo "docker build nubmer is: ${env.JOB_NAME}" > /home/jenkins/workspace/test_job/build_number.txt'
-                sh 'echo "${JOB_NAME}" > "/home/jenkins/workspace/${JOB_NAME}/job_name.txt"'
+                checkout scm
             }
         }
-
-        stage ('Stage #2') {
-            agent {
-                label "jenkins_machine"
-            }
-
+        stage ('init terraform') {
             steps {
-                sh 'echo "CLASS = $CLASS\nNAME =${NAME}" > gotted_env_agent_2.txt'
+                withCredentials([aws(credentialsId : 'aws_creds_dmaas')])
+                sh """
+                    $TERRAFORM_HOME/terraform init 
+                    $TERRAFORM_HOME/terraform plan
+                """
             }
         }
     }
-   
 }
+
+// pipeline {
+//     agent any
+
+//     environment {
+//         CLASS = "jenkins_class"
+//         NAME = "Mahmoud"
+//         DOCKERHUB_CREDS = credentials("dockerhub_credentials")   
+//     }
+//     stages {
+//         stage ('stage #1') {
+
+//             agent {
+//                 label "linux"
+//             }
+//             steps {
+//                 sh 'echo "dockerhub_username = ${DOCKERHUB_CREDS_USR}\ndockerhub_passowrd is: ${DOCKERHUB_CREDS_PSW}" > gotted_env.txt'
+//                 // sh 'echo "docker build nubmer is: ${env.JOB_NAME}" > "/home/jenkins/workspace/test_job/build_number.txt"'
+//                 // sh 'echo "docker build nubmer is: ${env.JOB_NAME}" > /home/jenkins/workspace/test_job/build_number.txt'
+//                 sh 'echo "${JOB_NAME}" > "/home/jenkins/workspace/${JOB_NAME}/job_name.txt"'
+//                 echo "${BUILD_NUMBER}"
+//             }
+//         }
+
+//         stage ('Stage #2') {
+//             agent {
+//                 label "jenkins_machine"
+//             }
+
+//             steps {
+//                 sh 'echo "CLASS = $CLASS\nNAME = ${NAME}" > gotted_env_agent_2.txt'
+//                 echo "${BUILD_NUMBER}"
+//             }
+//         }
+//     }
+   
+// }
