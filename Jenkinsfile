@@ -1,6 +1,8 @@
 pipeline {
     agent any 
-
+    tools {
+        terraform 'tf'
+    }
 
     stages {
         stage ('checkout') {
@@ -10,11 +12,11 @@ pipeline {
         }
         stage ('init terraform') {
             steps {
-                TERRAFORM_HOME = tool name: "tf", type "terraform"
+                
                 withCredentials([aws(credentialsId : 'aws_creds_dmaas')])
                 sh """
-                    $TERRAFORM_HOME/terraform init 
-                    $TERRAFORM_HOME/terraform plan
+                    terraform init 
+                    terraform plan
                 """
             }
         }
