@@ -24,7 +24,7 @@ pipeline {
         }
     }
     post {
-        alwys {
+        always {
             archiveArtifacts artifacts: 'terraform.tfstate'
         }
     }
