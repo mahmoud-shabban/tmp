@@ -13,11 +13,12 @@ pipeline {
         stage ('init terraform') {
             steps {
                 
-                withCredentials([aws(credentialsId : 'aws_creds_dmaas')])
-                sh """
-                    terraform init 
-                    terraform plan
-                """
+                withCredentials([aws(credentialsId : 'aws_creds_dmaas')]) {
+                    sh """
+                        terraform init 
+                        terraform plan
+                    """
+                }
             }
         }
     }
