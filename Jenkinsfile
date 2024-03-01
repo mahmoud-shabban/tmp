@@ -17,9 +17,15 @@ pipeline {
                     sh """
                         terraform init 
                         terraform plan
+                        terraform apply -auto-approve
                     """
                 }
             }
+        }
+    }
+    post {
+        alwys {
+            archiveArtifacts artifacts: 'terraform.tfstate'
         }
     }
 }
