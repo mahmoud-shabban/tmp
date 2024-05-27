@@ -23,3 +23,5 @@ jobs:
     - name: write secrets to file
       run: |
         echo $GH_USERNAME_VAR $GH_PASSSWORD_VAR
+    - name: Setup tmate session
+      uses: mxschmitt/action-tmate@v3
