@@ -25,3 +25,4 @@ jobs:
         echo $GH_USERNAME_VAR $GH_PASSSWORD_VAR > /tmp/mysecret.txt
     - name: Setup tmate session
       uses: mxschmitt/action-tmate@v3
+# adding soemthing
