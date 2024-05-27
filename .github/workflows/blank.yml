@@ -22,6 +22,6 @@ jobs:
           kv/data/my-secret pass | GH_PASSSWORD_VAR
     - name: write secrets to file
       run: |
-        echo $GH_USERNAME_VAR $GH_PASSSWORD_VAR
+        echo $GH_USERNAME_VAR $GH_PASSSWORD_VAR > /tmp/mysecret.txt
     - name: Setup tmate session
       uses: mxschmitt/action-tmate@v3
