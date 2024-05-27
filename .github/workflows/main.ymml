@@ -5,18 +5,25 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - main
+    - main
 
 jobs:
-  add-note:
-    name: add notes to file called workflow.txt
+  vault-demo:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: display
-        run: |
-          git branch
+    - name: Read Secrets
+      uses: hashicorp/vault-action@v3.0.0
+      with:
+        url: http://18.170.44.170:8200
+        method: token
+        token: hvs.82XSpuqx1JFXQD14uVOVuaAC
+        secrets: |
+          kv/data/my-secret username | GH_USERNAME_VAR ;
+          kv/data/my-secret pass | GH_PASSSWORD_VAR
+    - name: write secrets to file
+      run: |
+        echo $GH_USERNAME_VAR $GH_PASSSWORD_VAR
+
 
 
 
